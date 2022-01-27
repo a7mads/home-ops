@@ -26,6 +26,11 @@ spec:
         matchNames:
           - default
           - networking
+          - home
+          - db
+          - network
+          - rook-ceph
+          - collab
       name: "you"
       customApps:
         - name: Some External Cluster Service
@@ -106,14 +111,14 @@ spec:
           hajimari.io/icon: "weather-sunset"
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         hosts:
-          - host: "hajimarii.${SECRET_DOMAIN}"
+          - host: "hajimari.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "hajimarii.${SECRET_DOMAIN}"
-            secretName: "hajimarii-tls"
+              - "hajimari.${SECRET_DOMAIN}"
+            secretName: "hajimari-tls"
     persistence:
       data:
         enabled: true
