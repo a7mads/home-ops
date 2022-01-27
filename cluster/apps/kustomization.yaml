@@ -10,3 +10,4 @@ resources:
   - network
   - db
   - home
+  - collab
