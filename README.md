@@ -1,4 +1,4 @@
-# home-cluster
+# home-ops
 
 My home k8s cluster built with the help of k8s@home managed by Flux GitOps
 
