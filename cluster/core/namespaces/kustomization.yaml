@@ -6,3 +6,7 @@ resources:
   - networking.yaml
   - rook-ceph.yaml
   - media.yaml
+  - db.yaml
+  - collab.yaml
+  - home.yaml
+  - network.yaml
