@@ -38,13 +38,9 @@ spec:
         external-dns.alpha.kubernetes.io/target: ipv4.${SECRET_DOMAIN}
         external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        hajimari.io/enable: "true"
-        hajimari.io/icon: home-edit
-        hajimari.io/group: home
-        hajimari.io/appName: node-red
         # traefik.ingress.kubernetes.io/router.middlewares: collab-nextcloud-dav-redirect@kubernetescrd,collab-hsts@kubernetescrd
       tls:
-        - secretName: tls.nextcloud
+        - secretName: nextcloud-tls
           hosts:
             - cloud.${SECRET_DOMAIN}
 
@@ -94,20 +90,20 @@ spec:
       enabled: true
       type: postgresql
       host: nextcloud-postgresql.collab
-      user: nextcloud
+      user: ${SECRET_NEXTCLOUD_POSTGRES_USER}
       password: ${SECRET_NEXTCLOUD_POSTGRES_PASSWORD}
       database: nextcloud
 
-    cronjob:
-      enabled: true
+    # cronjob:
+    #   enabled: true
 
-    redis:
-      enabled: true
+    # redis:
+    #   enabled: true
 
     postgresql:
       enabled: true
 
-      postgresqlUsername: nextcloud
+      postgresqlUsername: ${SECRET_NEXTCLOUD_POSTGRES_USER}
       postgresqlPassword: ${SECRET_NEXTCLOUD_POSTGRES_PASSWORD}
       postgresqlDatabase: nextcloud
 
