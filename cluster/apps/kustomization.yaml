@@ -9,3 +9,4 @@ resources:
   - media
   - network
   - db
+  - home
