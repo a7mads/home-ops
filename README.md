@@ -19,7 +19,7 @@ My home k8s cluster built with the help of k8s@home managed by Flux GitOps
 - Proxmox Host
 - Traefik Ingress
 - Rook Ceph
-- TrueNAS 8x Tib
+- TrueNAS
 
 ## Automations
 - [Renovate](https://github.com/renovatebot/renovate)
