@@ -24,6 +24,7 @@ spec:
     env:
       PHP_MEMORY_LIMIT: 256M
       NEXTCLOUD_DOMAIN_NAME: cloud.${SECRET_DOMAIN}
+      TRUSTED_PROXIES: ${NETWORK_K8S_CLUSTER_CIDR}
 
     persistence:
       enabled: true
