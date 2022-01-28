@@ -11,6 +11,8 @@ My home k8s cluster built with the help of k8s@home managed by Flux GitOps
 | VM Node                | 8GB  | 1TB NVMe   |  Worker  | Ubuntu 20.04 LTS |
 | VM Node                | 8GB  | 1TB NVMe   |  Worker  | Ubuntu 20.04 LTS |
 | VM Node                | 8GB  | 1TB NVMe   |  Worker  | Ubuntu 20.04 LTS |
+| TrueNAS VM on PVE      | 16GB | 4x4TB      |  NAS     | Ubuntu 20.04 LTS |
+
 
 ## Cluster
 
