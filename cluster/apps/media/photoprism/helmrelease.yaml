@@ -25,14 +25,16 @@ spec:
       registry: docker.io
     env:
       TZ: Asia/Dubai
+      PHOTOPRISM_ADMIN_PASSWORD: ${PHOTOPRISM_ADMIN_PASSWORD}
+
       # UID: 1024
       # GID: 100
       PHOTOPRISM_PUBLIC: "true"
       PHOTOPRISM_ORIGINALS_PATH: "/photoprism/originals"
       PHOTOPRISM_STORAGE_PATH: "/photoprism/storage"
-    envFrom:
-    - secretRef:
-        name: photoprism-env-secrets
+    # envFrom:
+    # - secretRef:
+    #     name: photoprism-env-secrets
     podSecurityContext:
       # runAsUser: 1024
       supplementalGroups:
