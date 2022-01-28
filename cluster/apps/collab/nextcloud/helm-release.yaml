@@ -61,11 +61,11 @@ spec:
       password: ${SECRET_NEXTCLOUD_ADMIN_PASSWORD}
 
       configs:
-        # proxy.config.php: |-
-        #   <?php
-        #   $CONFIG = array (
-        #     'trusted_proxies' => array('${NETWORK_K8S_CLUSTER_CIDR}')
-        #   );
+         proxy.config.php: |-
+           <?php
+           $CONFIG = array (
+             'trusted_proxies' => array('192.168.2.69')
+           );
         protocol.config.php: |-
           <?php
           $CONFIG = array (
