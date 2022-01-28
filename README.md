@@ -23,4 +23,3 @@ My home k8s cluster built with the help of k8s@home managed by Flux GitOps
 
 ## Automations
 - [Renovate](https://github.com/renovatebot/renovate)
-- [Renovate Helm Releases](https://github.com/k8s-at-home/renovate-helm-releases)
