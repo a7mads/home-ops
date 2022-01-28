@@ -16,7 +16,7 @@ My home k8s cluster built with the help of k8s@home managed by Flux GitOps
 
 ## Cluster
 
-- Proxmox PVE Host
+- Proxmox Host
 - Traefik Ingress
 - Rook Ceph
 - TrueNAS 8x Tib
