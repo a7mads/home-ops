@@ -26,6 +26,17 @@ spec:
       NEXTCLOUD_DOMAIN_NAME: cloud.${SECRET_DOMAIN}
       TRUSTED_PROXIES: ${NETWORK_K8S_CLUSTER_CIDR}
 
+      name: nextcloud-cron
+      image: nextcloud:23.0.0-apache
+      imagePullPolicy: IfNotPresent
+      command:
+        - /cron.sh
+      volumeMounts:
+        - name: nextcloud-config
+          mountPath: /var/www/html
+        - name: nextcloud-data
+          mountPath: /var/www/data
+
     persistence:
       enabled: true
       existingClaim: nextcloud-data-pvc
@@ -101,8 +112,8 @@ spec:
     cronjob:
       enabled: true
 
-    redis:
-      enabled: true
+    # redis:
+    #   enabled: true
 
     postgresql:
       enabled: true
