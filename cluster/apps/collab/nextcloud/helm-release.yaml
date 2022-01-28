@@ -98,11 +98,11 @@ spec:
       password: ${SECRET_NEXTCLOUD_POSTGRES_PASSWORD}
       database: nextcloud
 
-    # cronjob:
-    #   enabled: true
+    cronjob:
+      enabled: true
 
-    # redis:
-    #   enabled: true
+    redis:
+      enabled: true
 
     postgresql:
       enabled: true
