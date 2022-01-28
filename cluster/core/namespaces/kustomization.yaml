@@ -10,3 +10,4 @@ resources:
   - collab.yaml
   - home.yaml
   - network.yaml
+  - monitoring.yaml
