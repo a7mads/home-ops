@@ -42,7 +42,7 @@ spec:
         hajimari.io/icon: cloud
         hajimari.io/group: collab
         hajimari.io/appName: cloud
-        # traefik.ingress.kubernetes.io/router.middlewares: collab-nextcloud-dav-redirect@kubernetescrd,collab-hsts@kubernetescrd
+        traefik.ingress.kubernetes.io/router.middlewares: collab-nextcloud-dav-redirect@kubernetescrd,collab-hsts@kubernetescrd
       tls:
         - secretName: nextcloud-tls
           hosts:
@@ -64,21 +64,17 @@ spec:
         proxy.config.php: |-
           <?php
           $CONFIG = array (
-            'trusted_proxies' =>
-            array(
-               0 => '${NETWORK_K8S_CLUSTER_CIDR}',
-            ),
-            'forwarded_for_headers' =>
-            array (
-              0 => 'HTTP_X_FORWARDED_FOR',
-            ),
+            'trusted_proxies' => array('${NETWORK_K8S_CLUSTER_CIDR}')
           );
-        gitops.config.php: |-
+        protocol.config.php: |-
           <?php
           $CONFIG = array (
-            'appstoreenabled' => true,
-            'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
-            'mail_domain' => 'a7mad.ae',
+            'overwriteprotocol' => 'https'
+          );
+        phone_region.config.php: |-
+          <?php
+          $CONFIG = array (
+            'default_phone_region' => 'AE'
           );
       #   enabled: true
       #   fromAddress: cloud
