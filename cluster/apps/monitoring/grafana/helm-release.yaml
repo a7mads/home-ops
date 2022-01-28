@@ -131,19 +131,16 @@ spec:
     #   enabled: true
     ingress:
       enabled: true
+      ingressClassName: "traefik"
       annotations:
-        kubernetes.io/ingress.class: traefik
-        cert-manager.io/cluster-issuer: letsencrypt-production
-        external-dns/is-public: "true"
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        hajimari.io/enable: "true"
-        hajimari.io/icon: magnify-scan
-        hajimari.io/group: monitoring
-        hajimari.io/appName: grafana
+        cert-manager.io/cluster-issuer: letsencrypt-production
+      hosts:
+        - "grafana.${SECRET_DOMAIN}"
       tls:
         - secretName: grafana-tls
           hosts:
-            - grafana.${SECRET_DOMAIN}
+            - "grafana.${SECRET_DOMAIN}"
     serviceAccount:
       create: true
       autoMount: true
