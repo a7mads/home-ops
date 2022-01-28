@@ -64,17 +64,21 @@ spec:
         proxy.config.php: |-
           <?php
           $CONFIG = array (
-            'trusted_proxies' => array('${NETWORK_K8S_CLUSTER_CIDR}')
+            'trusted_proxies' =>
+            array(
+               0 => '${NETWORK_K8S_CLUSTER_CIDR}',
+            ),
+            'forwarded_for_headers' =>
+            array (
+              0 => 'HTTP_X_FORWARDED_FOR',
+            ),
           );
-        protocol.config.php: |-
+        gitops.config.php: |-
           <?php
           $CONFIG = array (
-            'overwriteprotocol' => 'https'
-          );
-        phone_region.config.php: |-
-          <?php
-          $CONFIG = array (
-            'default_phone_region' => 'AE'
+            'appstoreenabled' => true,
+            'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
+            'mail_domain' => 'a7mad.ae',
           );
       #   enabled: true
       #   fromAddress: cloud
