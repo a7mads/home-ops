@@ -8,20 +8,14 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
-      version: 30.2.0
+      version: 22.1.0
       sourceRef:
         kind: HelmRepository
         name: prometheus-community-charts
         namespace: flux-system
       interval: 5m
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    remediation:
-      retries: 3
   values:
     fullnameOverride: prometheus
     alertmanager:
@@ -33,6 +27,20 @@ spec:
           - name: "null"
           - name: "discord"
             slack_configs:
+              - channel: "#prometheus"
+                icon_url: https://avatars3.githubusercontent.com/u/3380462
+                username: "Prometheus"
+                send_resolved: true
+                title: |-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}
+                text: >-
+                  {{ range .Alerts -}}
+                    **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+                  **Description:** {{ if ne .Annotations.description ""}}{{ .Annotations.description }}{{else}}N/A{{ end }}
+                  **Details:**
+                    {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                    {{ end }}
+                  {{ end }}
         route:
           group_by: ["alertname", "job"]
           group_wait: 30s
@@ -45,11 +53,8 @@ spec:
                 alertname: Watchdog
             - receiver: "discord"
               match_re:
+                # severity: critical|warning
                 severity: critical
-              continue: true
-            - receiver: "nodered"
-              match:
-                alertname: UPSOnBattery
               continue: true
         inhibit_rules:
           - source_match:
@@ -61,11 +66,16 @@ spec:
         enabled: true
         pathType: Prefix
         ingressClassName: "traefik"
+        annotations:
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-production
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         hosts:
-          - &host "alert-manager.${SECRET_DOMAIN}"
+          - "alert-manager.${SECRET_DOMAIN}"
         tls:
           - hosts:
-              - *host
+              - "alert-manager.${SECRET_DOMAIN}"
+            secretName: alert-manager-cert
       alertmanagerSpec:
         storage:
           volumeClaimTemplate:
@@ -74,20 +84,19 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
+    nodeExporter:
+      serviceMonitor:
+        relabelings:
+          - action: replace
+            regex: (.*)
+            replacement: $1
+            sourceLabels:
+              - __meta_kubernetes_pod_node_name
+            targetLabel: kubernetes_node
     kube-state-metrics:
       fullnameOverride: kube-state-metrics
     prometheus-node-exporter:
       fullnameOverride: node-exporter
-      prometheus:
-        monitor:
-          enabled: true
-          relabelings:
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels:
-                - __meta_kubernetes_pod_node_name
-              targetLabel: kubernetes_node
     grafana:
       enabled: false
       forceDeployDashboards: true
@@ -134,30 +143,31 @@ spec:
         enabled: true
         port: 2381
         targetPort: 2381
+    # Setting this option to 0 disabled CPU limits
     prometheusOperator:
-      prometheusConfigReloader:
-        resources:
-          requests:
-            cpu: 100m
-            memory: 50Mi
-          limits:
-            cpu: 200m
-            memory: 100Mi
+      configReloaderCpu: 0
     prometheus:
       ingress:
         enabled: true
         pathType: Prefix
         ingressClassName: "traefik"
+        annotations:
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-production
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         hosts:
-          - &host "prometheus.${SECRET_DOMAIN}"
+          - "prom-server.${SECRET_DOMAIN}"
         tls:
           - hosts:
-              - *host
+              - "prom-server.${SECRET_DOMAIN}"
+            secretName: prom-server-cert
       thanosService:
         enabled: true
-      thanosServiceMonitor:
-        enabled: true
       prometheusSpec:
+        # externalUrl: "prom-server.${SECRET_DOMAIN}"
+        # image:
+        #   repository: quay.io/prometheus/prometheus
+        #   tag: v2.20.0
         replicas: 1
         replicaExternalLabelName: "replica"
         ruleSelectorNilUsesHelmValues: false
@@ -170,13 +180,27 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: "ceph-block"
+              storageClassName: ceph-block
               resources:
                 requests:
                   storage: 10Gi
         thanos:
-          image: quay.io/thanos/thanos:v0.24.0
-          version: v0.22.0
+          image: quay.io/thanos/thanos:v0.23.1
+          version: v0.21.1
           objectStorageConfig:
-            name: thanos-objstore
-            key: objstore.yml
+            name: thanos
+            key: object-store.yaml
+        additionalScrapeConfigs:
+          # - job_name: "netdata-scrape"
+          #   metrics_path: "/api/v1/allmetrics"
+          #   params:
+          #     format: [prometheus_all_hosts]
+          #   honor_labels: true
+          #   static_configs:
+          #     - targets:
+          #         - nas-0.${SECRET_DOMAIN}:19999
+          #         - nas-1.${SECRET_DOMAIN}:19999
+          - job_name: "node-exporter"
+            static_configs:
+              - targets:
+                  - fw.${SECRET_DOMAIN}:9100
