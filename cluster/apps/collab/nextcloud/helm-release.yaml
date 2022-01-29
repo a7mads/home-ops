@@ -64,7 +64,14 @@ spec:
         proxy.config.php: |-
           <?php
           $CONFIG = array (
-            'trusted_proxies' => array '192.168.2.69'
+            'trusted_proxies' =>
+            array(
+               0 => '${NETWORK_K8S_CLUSTER_CIDR}',
+            ),
+            'forwarded_for_headers' =>
+            array (
+              0 => 'HTTP_X_FORWARDED_FOR',
+            ),
           );
         protocol.config.php: |-
           <?php
@@ -98,11 +105,11 @@ spec:
       password: ${SECRET_NEXTCLOUD_POSTGRES_PASSWORD}
       database: nextcloud
 
-    # cronjob:
-    #   enabled: true
+    cronjob:
+      enabled: false
 
-    # redis:
-    #   enabled: true
+    redis:
+      enabled: false
 
     postgresql:
       enabled: true

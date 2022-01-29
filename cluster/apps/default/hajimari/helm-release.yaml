@@ -32,6 +32,7 @@ spec:
           - rook-ceph
           - collab
           - media
+          - monitoring
       name: "you"
       customApps:
         - name: Some External Cluster Service
