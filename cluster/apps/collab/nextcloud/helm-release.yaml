@@ -108,8 +108,8 @@ spec:
     cronjob:
       enabled: false
 
-    # redis:
-    #   enabled: true
+    redis:
+      enabled: false
 
     postgresql:
       enabled: true
