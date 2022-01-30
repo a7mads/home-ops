@@ -25,3 +25,4 @@ resources:
   - weaveworks-kured-charts.yaml
   - runix-charts.yaml
   - nextcloud-charts.yaml
+  - vmware-tanzu-charts.yaml
