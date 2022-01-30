@@ -71,16 +71,16 @@ spec:
         limits:
           memory: 3000Mi
     schedules:
-      #   daily-backup:
-      #     schedule: "0 6 * * *"
-      #     template:
-      #       ttl: "120h"
-      mailu-hourly:
-        schedule: "0 */6 * * *"
+      daily-backup:
+        schedule: "0 6 * * *"
         template:
           ttl: "120h"
-          includedNamespaces:
-            - mail
+      # mailu-hourly:
+      #   schedule: "0 */6 * * *"
+      #   template:
+      #     ttl: "120h"
+      #     includedNamespaces:
+      #       - mail
     #   mcsv-minecraft-hourly:
     #     schedule: "0 * * * *"
     #     template:
