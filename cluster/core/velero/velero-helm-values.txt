@@ -1,0 +1,21 @@
+configuration:
+  provider: aws
+  backupStorageLocation:
+    name: default
+    bucket: velero
+    config:
+      region: home
+      s3ForcePathStyle: true
+      s3Url: https://treunas.$SECRET_DOMAIN:9000
+      publicUrl: https://treunas.$SECRET_DOMAIN
+  volumeSnapshotLocation:
+    name: aws
+    resticTimeout: 6h
+    config:
+      region: home
+credentials:
+  secretContents:
+    cloud: |
+      [default]
+      aws_access_key_id = $SECRET_MINIO_ACCESS_KEY
+      aws_secret_access_key = $SECRET_MINIO_SECRET_KEY
