@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: minio
     app.kubernetes.io/name: minio
   name: minio
-  namespace: infra
+  namespace: storage
 spec:
   ingressClassName: traefik
   rules:
