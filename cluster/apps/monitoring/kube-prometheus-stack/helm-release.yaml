@@ -81,7 +81,7 @@ spec:
         pathType: Prefix
         ingressClassName: "traefik"
         annotations:
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+          cert-manager.io/cluster-issuer: "letsencrypt-production"
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         hosts:
           - "alert-manager.${SECRET_DOMAIN}"
@@ -172,6 +172,7 @@ spec:
         ingressClassName: "traefik"
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+          cert-manager.io/cluster-issuer: "letsencrypt-production"
         hosts:
           - "prometheus.${SECRET_DOMAIN}"
         tls:
