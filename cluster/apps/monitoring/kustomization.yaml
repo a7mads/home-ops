@@ -6,3 +6,4 @@ resources:
   - thanos
   - kube-prometheus-stack
   - loki
+  - speedtest-exporter
