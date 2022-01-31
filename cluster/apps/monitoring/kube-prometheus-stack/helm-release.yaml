@@ -6,6 +6,13 @@ metadata:
   namespace: monitoring
 spec:
   interval: 5m
+  install:
+  disableWait: true
+  remediation:
+    retries: 300
+upgrade:
+  remediation:
+    retries: 300
   chart:
     spec:
       chart: kube-prometheus-stack
