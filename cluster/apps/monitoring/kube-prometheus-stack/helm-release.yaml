@@ -205,3 +205,10 @@ spec:
           objectStorageConfig:
             name: thanos-objstore
             key: objstore.yml
+        additionalScrapeConfigs:
+          - job_name: minio
+            honor_timestamps: true
+            metrics_path: /minio/v2/metrics/cluster
+            static_configs:
+              - targets:
+                  - "192.168.2.200:9000"
