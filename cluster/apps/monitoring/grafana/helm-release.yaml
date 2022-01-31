@@ -21,7 +21,7 @@ spec:
   values:
     podAnnotations:
       backup.velero.io/backup-volumes: storage
-      configmap.reloader.stakater.com/reload: "grafana"
+    #   configmap.reloader.stakater.com/reload: "grafana"
     replicas: 1
     env:
       GF_EXPLORE_ENABLED: true
