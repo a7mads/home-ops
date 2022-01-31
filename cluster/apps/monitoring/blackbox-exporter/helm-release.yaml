@@ -42,5 +42,5 @@ spec:
           url: 192.168.1.122
           module: icmp
         - name: epson
-          url: 192.168.1.122
+          url: 192.168.3.143
           module: icmp
