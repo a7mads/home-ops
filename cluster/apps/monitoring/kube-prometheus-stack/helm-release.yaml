@@ -212,3 +212,8 @@ spec:
             static_configs:
               - targets:
                   - 192.168.2.201:9000
+          - job_name: node-exporter
+            honor_timestamps: true
+            static_configs:
+              - targets:
+                  - "node-exporter:9100"
