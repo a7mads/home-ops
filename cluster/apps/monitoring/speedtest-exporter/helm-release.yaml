@@ -20,6 +20,8 @@ spec:
     image:
       repository: ghcr.io/miguelndecarvalho/speedtest-exporter
       tag: v3.4.0
+    env:
+      TZ: "Asia/Dubai"
     prometheus:
       podMonitor:
         enabled: true
