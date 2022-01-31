@@ -212,4 +212,4 @@ spec:
             scheme: http
             static_configs:
               - targets:
-                  - "192.168.2.200:9000"
+                  - "192.168.2.201:9000"
