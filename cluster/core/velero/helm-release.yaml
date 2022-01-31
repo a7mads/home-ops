@@ -75,3 +75,12 @@ spec:
         schedule: "0 6 * * *"
         template:
           ttl: "120h"
+      adguard-home-adguard-home-hourly:
+        schedule: "* * * * *"
+        template:
+          labelSelector:
+            matchLabels:
+              app: adguard-home-adguard-home
+          ttl: "24h"
+          includedNamespaces:
+            - network
