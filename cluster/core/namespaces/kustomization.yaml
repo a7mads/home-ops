@@ -11,5 +11,4 @@ resources:
   - home.yaml
   - network.yaml
   - monitoring.yaml
-  - storage.yaml
   - velero.yaml
