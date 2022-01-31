@@ -12,27 +12,14 @@ spec:
       version: 5.3.1
       sourceRef:
         kind: HelmRepository
-        name: prometheus-community-charts
+        name: prometheus-community
         namespace: flux-system
       interval: 5m
-  install:
-    createNamespace: true
   values:
     fullnameOverride: blackbox-exporter
-    image:
-      repository: quay.io/prometheus/blackbox-exporter
-    ingress:
-      enabled: true
-      className: traefik
-      hosts:
-        - host: &host "blackbox.${SECRET_DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - *host
+    nameOverride: blackbox-exporter
     allowIcmp: true
+    secretConfig: false
     config:
       modules:
         icmp:
@@ -45,35 +32,15 @@ spec:
       defaults:
         labels:
           release: prometheus
-        interval: 2m
+        interval: 30s
         scrapeTimeout: 30s
       targets:
-        - module: icmp
-          name: dyson
-          url: opnsense
-        - module: icmp
-          name: ios
-          url: ios
-        - module: icmp
-          name: epson
-          url: epson
-    prometheusRule:
-      enabled: true
-      additionalLabels:
-        app: prometheus-operator
-        release: prometheus
-      rules:
-        - alert: HostDown
-          expr: probe_success == 0
-          for: 1m
-          labels:
-            severity: critical
-          annotations:
-            message: The host {{"{{ $labels.target }}"}} is currently unreachable
-        - alert: SlowResponseTime
-          annotations:
-            message: The response time for {{"{{ $labels.target }}"}} has been greater than 30 seconds for 5 minutes.
-          expr: probe_duration_seconds > 30
-          for: 5m
-          labels:
-            severity: warning
+        - name: dyson
+          url: 192.168.1.216
+          module: icmp
+        - name: ios
+          url: 192.168.1.122
+          module: icmp
+        - name: epson
+          url: 192.168.1.122
+          module: icmp
