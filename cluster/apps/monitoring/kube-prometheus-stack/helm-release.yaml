@@ -209,7 +209,6 @@ spec:
           - job_name: minio
             honor_timestamps: true
             metrics_path: /minio/v2/metrics/cluster
-            scheme: http
             static_configs:
               - targets:
                   - 192.168.2.201:9000
