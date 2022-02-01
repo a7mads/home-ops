@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - grafana
   # - thanos
-  # - kube-prometheus-stack
+  - kube-prometheus-stack
   - loki
   - speedtest-exporter
   # - blackbox-exporter
