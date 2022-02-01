@@ -18,10 +18,10 @@ spec:
   install:
     createNamespace: true
     remediation:
-      retries: 3
+      retries: 300
   upgrade:
     remediation:
-      retries: 3
+      retries: 300
   values:
     fullnameOverride: prometheus
     alertmanager:
