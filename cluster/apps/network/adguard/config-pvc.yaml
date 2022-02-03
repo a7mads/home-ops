@@ -4,6 +4,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: adguard-home-config-v1
   namespace: network
+  labels:
+    k10.kasten.io/backup: "true"
 spec:
   accessModes:
     - ReadWriteOnce
