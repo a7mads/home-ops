@@ -6,5 +6,5 @@ resources:
   - kube-system
   - metallb-system
   - system-upgrade
-  # - rook-ceph
-  # - velero
+  - rook-ceph
+  - velero
