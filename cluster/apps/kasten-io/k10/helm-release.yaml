@@ -38,8 +38,6 @@ spec:
         enabled: true
     clusterName: k8s
     ingress:
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-production
       create: true
       class: traefik
       host: &host "k10.${SECRET_DOMAIN}"
