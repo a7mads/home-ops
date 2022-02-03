@@ -11,4 +11,4 @@ resources:
   - db
   - home
   - collab
-  # - monitoring
+  - monitoring
