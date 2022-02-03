@@ -40,12 +40,17 @@ spec:
     ingress:
       create: true
       class: traefik
-      host: &host "k10.${SECRET_DOMAIN}"
+      host: k10.${SECRET_DOMAIN}
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
+        external-dns.alpha.kubernetes.io/target: ingress.${SECRET_DOMAIN}
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        # traefik.ingress.kubernetes.io/router.middlewares: network-rfc1918-ips@kubernetescrd
       urlPath: k10
       hosts:
-        - *host
+        - k10.${SECRET_DOMAIN}
       tls:
         enabled: true
-        secretName: "${SECRET_DOMAIN/./-}-tls"
+        secretName: k10-tls
     grafana:
       enabled: false
