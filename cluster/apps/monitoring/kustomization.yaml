@@ -6,5 +6,5 @@ resources:
   - thanos
   - kube-prometheus-stack
   - loki
-  # - speedtest-exporter
+  - speedtest-exporter
   # - blackbox-exporter
