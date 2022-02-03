@@ -5,7 +5,7 @@ resources:
   - kube-system
   - networking
   - system-upgrade
-  - rook-ceph
+  # - rook-ceph
   # - media
   # - network
   # - db
