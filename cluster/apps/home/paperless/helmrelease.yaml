@@ -31,6 +31,7 @@ spec:
       PAPERLESS_DBHOST: paperless-postgresql.home.svc.cluster.local.
       PAPERLESS_DBUSER: "${SECRET_PAPERLESS_POSTGRES_USER}"
       PAPERLESS_DBPASS: "${SECRET_PAPERLESS_POSTGRES_PASSWORD}"
+      PAPERLESS_DBNAME: paperless-ng
 
     persistence:
       data:
