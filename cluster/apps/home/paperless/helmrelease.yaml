@@ -31,8 +31,8 @@ spec:
       PAPERLESS_OCR_LANGUAGE: EN
       PAPERLESS_TIME_ZONE: "Asia/Dubai"
       # PAPERLESS_CONSUMER_POLLING: "60"
-      # PAPERLESS_REDIS: redis://localhost:6379
-      PAPERLESS_DBHOST: "${SECRET_PAPERLESS_POSTGRES_HOST}"
+      PAPERLESS_REDIS: redis://localhost:6379
+      PAPERLESS_DBHOST: paperless-postgresql.home.svc.cluster.local.
       PAPERLESS_DBUSER: "${SECRET_PAPERLESS_POSTGRES_USER}"
       PAPERLESS_DBPASS: "${SECRET_PAPERLESS_POSTGRES_PASSWORD}"
 
@@ -78,7 +78,7 @@ spec:
             hosts:
               - "dms.${SECRET_DOMAIN}"
 
-    # additionalContainers:
-    #   - name: broker
-    #     image: redis:6.2
-    #     imagePullPolicy: IfNotPresent
+    additionalContainers:
+      - name: broker
+        image: redis:6.2
+        imagePullPolicy: IfNotPresent
