@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   # - joplin-postgresql-secret.enc.yaml
   - helm-release.yaml
+  - joplin-postgresql-pvc.yaml
