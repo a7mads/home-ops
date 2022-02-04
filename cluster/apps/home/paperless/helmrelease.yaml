@@ -17,10 +17,6 @@ spec:
         namespace: flux-system
       interval: 5m
 
-  dependsOn:
-    - name: traefik
-      namespace: network
-
   # See https://github.com/k8s-at-home/charts/blob/master/charts/paperless/values.yaml
   values:
     image:
