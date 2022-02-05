@@ -15,65 +15,71 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  install:
-    createNamespace: true
   values:
     image:
       repository: ghcr.io/k8s-at-home/plex
       tag: v1.25.4.5487-648a8f9f9
-    env:
-      TZ: "Asia/Dubai"
+
     podSecurityContext:
       supplementalGroups:
         - 44
         - 109
-        - 100
+        - 65539
+
+    env:
+      TZ: "Asia/Dubai"
+
     service:
       main:
         type: LoadBalancer
-        externalIPs:
-          - "${PLEX_ADDR}"
+        annotations:
+          traefik.ingress.kubernetes.io/service.serversscheme: https
+        loadBalancerIP: ${PLEX_ADDR}
         externalTrafficPolicy: Local
+
     ingress:
       main:
         enabled: true
         ingressClassName: "traefik"
         annotations:
-          external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
+          cert-manager.io/cluster-issuer: letsencrypt-production
           external-dns/is-public: "true"
-          hajimari.io/enable: "true"
-          hajimari.io/icon: "plex"
-          traefik.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          external-dns.alpha.kubernetes.io/target: ingress.${PERSONAL_DOMAIN}
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
         hosts:
-          - host: &host "plex.${SECRET_DOMAIN}"
+          - host: &host "plex.${PERSONAL_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
         tls:
-          - hosts:
+          - secretName: plex.tls
+            hosts:
               - *host
+
     persistence:
       config:
         enabled: true
-        existingClaim: plex-config-pvc
-      media:
+        existingClaim: plex-config-v1
+
+      transcode:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+
+      nfs-nas-media:
         enabled: true
         type: custom
         volumeSpec:
           nfs:
             server: "${NAS_ADD}"
             path: /mnt/bear/media
-        mountPath: /media
+        mountPath: /storage/media
         readOnly: true
-      transcode:
-        enabled: true
-        type: emptyDir
-        medium: Memory
-    podAnnotations:
-      configmap.reloader.stakater.com/reload: "plex-promtail"
+
     resources:
       requests:
-        cpu: 1000m
-        memory: 1000Mi
+        cpu: 35m
+        memory: 1500Mi
       limits:
         memory: 4000Mi
