@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts
       chart: plex
       version: 6.2.0
       sourceRef:
@@ -16,51 +15,47 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-
+  install:
+    createNamespace: true
   values:
     image:
       repository: ghcr.io/k8s-at-home/plex
-      tag: v1.25.2.5319-c43dc0277
-
+      tag: v1.25.4.5487-648a8f9f9
     env:
       TZ: "Asia/Dubai"
-
     podSecurityContext:
       supplementalGroups:
         - 44
         - 109
         - 100
-
     service:
       main:
         type: LoadBalancer
         externalIPs:
-          - "${PLEX-ADDR}"
+          - "${PLEX_ADDR}"
         externalTrafficPolicy: Local
-
     ingress:
       main:
         enabled: true
         ingressClassName: "traefik"
         annotations:
-          external-dns/is-public: "true"
           external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
+          external-dns/is-public: "true"
           hajimari.io/enable: "true"
-          hajimari.io/icon: "movie-play"
+          hajimari.io/icon: "plex"
+          traefik.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
-        - host: "plex.${SECRET_DOMAIN}"
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: &host "plex.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
-        - hosts:
-          - "plex.${SECRET_DOMAIN}"
-          secretName: plex-tls
-
+          - hosts:
+              - *host
     persistence:
       config:
         enabled: true
-        existingClaim: plex-config-v1
+        existingClaim: plex-config-pvc
       media:
         enabled: true
         type: custom
@@ -69,14 +64,25 @@ spec:
             server: "${NAS_ADD}"
             path: /mnt/bear/media
         mountPath: /media
+        readOnly: true
       transcode:
         enabled: true
         type: emptyDir
         medium: Memory
-
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/custom-intel-gpu
+                  operator: In
+                  values:
+                    - "true"
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: "plex-promtail"
     resources:
       requests:
-        cpu: 1
-        memory: 3Gi
+        cpu: 1000m
+        memory: 1000Mi
       limits:
-        memory: 4Gi
+        memory: 4000Mi
