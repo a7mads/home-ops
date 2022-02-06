@@ -24,7 +24,7 @@ spec:
     env:
       TZ: "Asia/Dubai"
       DOCKER_MODS: "linuxserver/qbittorrent|ghcr.io/gilbn/theme.park:qbittorrent"
-      TP_THEME: "nord"
+      TP_THEME: "dracula"
     settings:
       automaticPortSetup: false
     service:
