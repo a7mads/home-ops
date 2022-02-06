@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - overseerr
   - plex
-  - sonarr
+  # - sonarr
   - qbittorrent
   - prowlarr
   - unpackerr
