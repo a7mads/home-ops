@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/sonarr
-      tag: v3.0.6.1451
+      tag: v3.0.6-develop-alpine
     env:
       TZ: "Asia/Dubai"
       DOCKER_MODS: "ghcr.io/gilbn/theme.park:sonarr"
