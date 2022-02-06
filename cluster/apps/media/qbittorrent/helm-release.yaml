@@ -23,7 +23,7 @@ spec:
       tag: v4.3.9
     env:
       TZ: "Asia/Dubai"
-      DOCKER_MODS: "linuxserver/calibre-web:calibre|ghcr.io/gilbn/theme.park:qbittorrent"
+      DOCKER_MODS: "linuxserver/qbittorrent:qbittorrent|ghcr.io/gilbn/theme.park:qbittorrent"
       TP_THEME: "nord"
     settings:
       automaticPortSetup: false
