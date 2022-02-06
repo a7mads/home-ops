@@ -23,6 +23,8 @@ spec:
       tag: v3.0.6.1451
     env:
       TZ: "Asia/Dubai"
+      DOCKER_MODS: "ghcr.io/gilbn/theme.park:sonarr"
+      TP_THEME: "nord"
     ingress:
       main:
         enabled: true
@@ -32,10 +34,6 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: websecure
           hajimari.io/enable: "true"
           hajimari.io/icon: "television-box"
-          traefik.ingress.kubernetes.io/configuration-snippet: |
-            proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.dev/css/base/sonarr/nord.css"></head>';
-            sub_filter_once on;
         hosts:
           - host: &host "sonarr.${SECRET_DOMAIN}"
             paths:
