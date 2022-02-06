@@ -5,5 +5,5 @@ resources:
   - overseerr
   - plex
   - sonarr
-  - qbittorrent
+  # - qbittorrent
   - prowlarr
