@@ -44,8 +44,11 @@ spec:
             hosts:
               - *host
     podSecurityContext:
-      supplementalGroups:
-        - 100
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+      supplementalGroups: 100
     metrics:
       enabled: true
       serviceMonitor:
