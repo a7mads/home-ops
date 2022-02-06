@@ -81,7 +81,7 @@ spec:
       #       server: "${NAS_ADD"
       #       path: /mnt/backup/app/sonarr
       #   mountPath: /config/Backups
-      #   readOnly: false
+        readOnly: false
     resources:
       requests:
         cpu: "0.04"
