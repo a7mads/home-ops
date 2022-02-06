@@ -19,7 +19,7 @@ spec:
     createNamespace: true
   values:
     image:
-      repository: ghcr.io/k8s-at-home/qbittorrent
+      repository: ghcr.io/linuxserver/qbittorrent
       tag: v4.3.9
     env:
       TZ: "Asia/Dubai"
