@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/qbittorrent
-      tag: 4.40
+      tag: v4.40
     env:
       TZ: "Asia/Dubai"
       DOCKER_MODS: "linuxserver/qbittorrent|ghcr.io/gilbn/theme.park:qbittorrent"
