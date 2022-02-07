@@ -36,10 +36,10 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
-      tls:
-        - secretName: tautulli-tls
-          hosts:
-            - "tautulli.${SECRET_DOMAIN}"
+        tls:
+          - secretName: tautulli-tls
+            hosts:
+              - "tautulli.${SECRET_DOMAIN}"
     persistence:
       config:
         enabled: true
