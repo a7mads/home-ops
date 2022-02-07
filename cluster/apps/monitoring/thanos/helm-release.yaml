@@ -3,65 +3,60 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: thanos
-  namespace: monitoring
+  namespace: system-monitoring
 spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: thanos
-      version: 9.0.2
+      version: 9.0.3
       sourceRef:
         kind: HelmRepository
         name: bitnami-charts
         namespace: flux-system
       interval: 5m
-  install:
-    createNamespace: true
   values:
-    image:
-      registry: public.ecr.aws
-      repository: bitnami/thanos
     query:
       enabled: true
       replicaLabels:
         - replica
+
       dnsDiscovery:
         sidecarsService: prometheus-thanos-discovery
         sidecarsNamespace: monitoring
+
       ingress:
         enabled: true
+        hostname: "thanos-cluster.${CLUSTER_NAME}.${SECRET_DOMAIN}"
         ingressClassName: "traefik"
         annotations:
-          kubernetes.io/tls-acme: "true"
           cert-manager.io/cluster-issuer: letsencrypt-production
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          hajimari.io/enable: "true"
-          hajimari.io/icon: clipboard-text
-          hajimari.io/appName: Thanos
-        hosts:
-          - "thanos.${SECRET_DOMAIN}"
-        tls:
-          - hosts:
-              - "thanos.${SECRET_DOMAIN}"
-            secretName: thanos-tls
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        tls: true
+
     existingObjstoreSecret: thanos-objstore
+
     queryFrontend:
       enabled: false
+
     bucketweb:
       enabled: true
+
     compactor:
       enabled: true
       persistence:
         enabled: false
+
     storegateway:
       enabled: true
       persistence:
         enabled: true
         size: 5Gi
+
     ruler:
       enabled: false
+
     metrics:
       enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
