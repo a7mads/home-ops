@@ -44,10 +44,7 @@ spec:
             hosts:
               - *host
     podSecurityContext:
-      supplementalGroups:
-        - 100
-      runAsUser:
-        - 0
+      runAsUser: 0
     metrics:
       enabled: true
       serviceMonitor:
