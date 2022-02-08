@@ -70,8 +70,6 @@ spec:
           kubernetes.io/tls-acme: "true"
           cert-manager.io/cluster-issuer: letsencrypt-production
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          external-dns/is-public: "true"
-          external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
         hosts:
           - "alert-manager.${SECRET_DOMAIN}"
         tls:
@@ -86,19 +84,18 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-    # nodeExporter:
-    #   serviceMonitor:
-    #     relabelings:
-    #       - action: replace
-    #         regex: (.*)
-    #         replacement: $1
-    #         sourceLabels:
-    #           - __meta_kubernetes_pod_node_name
-    #         targetLabel: kubernetes_node
-    # kube-state-metrics:
-    #   fullnameOverride: kube-state-metrics
-    # prometheus-node-exporter:
-    #   fullnameOverride: node-exporter
+    prometheus-node-exporter:
+      fullnameOverride: node-exporter
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels:
+                - __meta_kubernetes_pod_node_name
+              targetLabel: kubernetes_node
     grafana:
       enabled: false
       forceDeployDashboards: true
@@ -200,7 +197,7 @@ spec:
             metrics_path: /minio/v2/metrics/cluster
             static_configs:
               - targets:
-                  - 192.168.2.201:9001
+                  - 192.168.2.201:9000
         # additionalScrapeConfigs:
         #   - job_name: "netdata-scrape"
         #     metrics_path: "/api/v1/allmetrics"
