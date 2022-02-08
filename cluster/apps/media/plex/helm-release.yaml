@@ -78,16 +78,16 @@ spec:
         mountPath: /storage/media
         readOnly: true
 
-    # resources:
-    #   requests:
-    #     cpu: 35m
-    #     memory: 1500Mi
-    #   limits:
-    #     memory: 4000Mi
-
     resources:
       requests:
-        cpu: 1000m
-        memory: 1000Mi
+        cpu: 35m
+        memory: 1500Mi
       limits:
-        memory: 6000Mi
+        memory: 4000Mi
+
+    # resources:
+    #   requests:
+    #     cpu: 1000m
+    #     memory: 1000Mi
+    #   limits:
+    #     memory: 6000Mi
