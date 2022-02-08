@@ -32,7 +32,7 @@ spec:
         sample_rate: 1
         environment: "kryptonian"
       postgresql:
-        host: "192.168.2.2"
+        host: "authentik-postgresql"
         name: "authentik"
         user: "authentik"
         password: "${SECRET_AUTHENTIK_POSTGRES_PASSWORD}"
