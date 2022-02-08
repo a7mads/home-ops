@@ -5,3 +5,5 @@ resources:
   - dashboard
   - cloudflare.yaml
   - rfc1918.yaml
+  - internal-auth.yaml
+  - external-auth.yaml
