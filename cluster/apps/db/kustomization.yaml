@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - pgadmin
   - postgres
-  - redis
+  # - redis
