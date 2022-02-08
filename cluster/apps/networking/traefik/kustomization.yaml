@@ -3,7 +3,4 @@ kind: Kustomization
 resources:
   - helm-release.yaml
   - dashboard
-  - cloudflare.yaml
-  - rfc1918.yaml
-  - internal-auth.yaml
-  - external-auth.yaml
+  - middlewares
