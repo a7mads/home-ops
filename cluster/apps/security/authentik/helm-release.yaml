@@ -10,62 +10,58 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.goauthentik.io
       chart: authentik
-      version: 4.0.3
+      version: 5.2.1
       sourceRef:
         kind: HelmRepository
         name: authentik-charts
         namespace: flux-system
       interval: 5m
   values:
+    outposts:
+      docker_image_base: ghcr.io/goauthentik/%(type)s
     fullnameOverride: authentik
     image:
       repository: ghcr.io/goauthentik/server
-      tag: 2021.12.5
+      tag: 2022.1.4
       pullPolicy: Always
+
     authentik:
       secret_key: "${SECRET_AUTHENTIK_SECRET_KEY}"
-      outposts:
-        docker_image_base: goauthentik.io/%(type)s:%(version)s
+      error_reporting:
+        enabled: true
+        sample_rate: 1
+        environment: "kryptonian"
       postgresql:
-        host: "authentik-postgresql"
+        host: "192.168.2.2"
         name: "authentik"
         user: "authentik"
         password: "${SECRET_AUTHENTIK_POSTGRES_PASSWORD}"
       redis:
-        host: "authentik-redis-master"
+        host: "redis.db.svc.cluster.local"
       # email:
-      #   host: "smtp.sendgrid.net"
+      #   host: "smtp.eu.mailgun.org"
       #   port: 587
       #   use_tls: true
-      #   username: "apikey"
-      #   password: "${SECRET_SENDGRID_API_KEY}"
-      #   from: "no-reply@${SECRET_DOMAIN}"
-    volumeMounts:
-      - name: media
-        mountPath: /media
-    volumes:
-      - name: media
-        persistentVolumeClaim:
-          claimName: authentik-config-v1
+      #   username: "authentik@mg.${MAIN_DOMAIN}"
+      #   password: "${SECRET_MAILGUN_PASSWORD}"
+      #   from: "no-reply@mg.${MAIN_DOMAIN}"
+
     ingress:
       enabled: true
       ingressClassName: "traefik"
       annotations:
-        external-dns/is-public: "true"
-        external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
-        hajimari.io/enable: "true"
-        hajimari.io/icon: "shield-account"
         traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-      hosts:
-        - host: "auth.${SECRET_DOMAIN}"
-          paths:
-            - path: "/"
-              pathType: Prefix
-      tls:
-        - hosts:
-            - "auth.${SECRET_DOMAIN}"
+#        traefik.ingress.kubernetes.io/router.middlewares: "networking-cloudflare-ips@kubernetescrd"
+        hosts:
+          - host: "id.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "id.${SECRET_DOMAIN}"
+            secretName: "id-tls"
     postgresql:
-      enabled: true
-      postgresqlPassword: "${SECRET_AUTHENTIK_POSTGRES_PASSWORD}"
+      enabled: false
     redis:
-      enabled: true
+      enabled: false
