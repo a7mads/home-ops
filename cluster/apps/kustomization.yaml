@@ -13,4 +13,4 @@ resources:
   - collab
   - monitoring
   - kasten-io
-  # - security
+  - security
