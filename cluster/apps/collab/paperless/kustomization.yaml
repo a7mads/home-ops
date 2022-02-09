@@ -5,3 +5,4 @@ resources:
   - data-pvc.yaml
   - helmrelease.yaml
   - media-pvc.yaml
+  - paperless-ng-postgresql-pvc.yaml
