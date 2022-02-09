@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: paperless
-  namespace: collab
+  namespace: home
 spec:
   interval: 5m
   chart:
@@ -26,9 +26,9 @@ spec:
     env:
       PAPERLESS_OCR_LANGUAGE: EN
       PAPERLESS_TIME_ZONE: "Asia/Dubai"
-      PAPERLESS_CONSUMER_POLLING: "60"
-      # PAPERLESS_REDIS: http://redis:6379
-      PAPERLESS_DBHOST: paperless-postgresql.collab.svc.cluster.local.
+      # PAPERLESS_CONSUMER_POLLING: "60"
+      PAPERLESS_REDIS: http://redis:6379
+      PAPERLESS_DBHOST: paperless-postgresql.home.svc.cluster.local.
       PAPERLESS_DBUSER: "${SECRET_PAPERLESS_POSTGRES_USER}"
       PAPERLESS_DBPASS: "${SECRET_PAPERLESS_POSTGRES_PASSWORD}"
       PAPERLESS_DBNAME: paperless-ng
@@ -64,7 +64,6 @@ spec:
         enabled: true
         ingressClassName: "traefik"
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           hajimari.io/enable: "true"
           hajimari.io/icon: "note-multiple"
@@ -78,11 +77,17 @@ spec:
             hosts:
               - "dms.${SECRET_DOMAIN}"
 
-    # additionalContainers:
-    #   - name: broker
-    #     image: redis:6.2
-    #     imagePullPolicy: IfNotPresent
-    redis:
-      enabled: false
-      auth:
-        enabled: false
+    additionalContainers:
+      - name: broker
+        image: redis:6.2
+        imagePullPolicy: IfNotPresent
+
+    postgresql:
+      postgresqlPostgresPassword: ${SECRET_PAPERLESS_POSTGRES_PASSWORD}
+      postgresqlUsername: paperless-ng
+      postgresqlPassword: ${SECRET_PAPERLESS_POSTGRES_PASSWORD}
+      postgresqlDatabase: paperless-ng
+      enabled: true
+      persistence:
+        enabled: true
+        existingClaim: paperless-ng-postgresql-pvc
