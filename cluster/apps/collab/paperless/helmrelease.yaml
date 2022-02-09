@@ -77,7 +77,10 @@ spec:
           - secretName: paperless-tls
             hosts:
               - "dms.${SECRET_DOMAIN}"
-
+    additionalContainers:
+      - name: broker
+        image: redis:6.2
+        imagePullPolicy: IfNotPresent
     redis:
       enabled: false
       auth:
