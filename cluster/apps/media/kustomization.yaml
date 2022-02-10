@@ -5,7 +5,6 @@ resources:
   - overseerr
   - plex
   - sonarr
-  - qbittorrent
   - prowlarr
   - unpackerr
   - tautulli
