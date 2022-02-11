@@ -29,17 +29,6 @@ spec:
       enabled: true
       existingClaim: nextcloud-data-pvc
 
-  persistence:
-    consume:
-      enabled: true
-      type: custom
-      volumeSpec:
-        nfs:
-          server: "${NAS_ADD}"
-          path: /mnt/bear/data/dms-import
-      mountPath: /storage/dms
-      readOnly: false
-
     ingress:
       enabled: true
       annotations:
@@ -72,6 +61,14 @@ spec:
       host: cloud.${SECRET_DOMAIN}
       username: ${SECRET_NEXTCLOUD_ADMIN_USER}
       password: ${SECRET_NEXTCLOUD_ADMIN_PASSWORD}
+      extraVolumes:
+        - name: nfs-dms
+          nfs:
+            server: "${NAS_ADD}"
+            path: "/data/dms-import"
+      extraVolumeMounts:
+        - name: nfs-dms
+          mountPath: "/dms"
 
       configs:
         proxy.config.php: |-
