@@ -29,6 +29,16 @@ spec:
       enabled: true
       existingClaim: nextcloud-data-pvc
 
+      nfs-nas-consume:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NAS_ADD}"
+            path: /mnt/bear/data/dms-import
+        mountPath: /storage/dms
+        readOnly: false
+
     ingress:
       enabled: true
       annotations:
