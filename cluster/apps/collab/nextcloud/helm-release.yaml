@@ -65,7 +65,7 @@ spec:
         - name: nfs-dms
           nfs:
             server: "${NAS_ADD}"
-            path: "/data/dms-import"
+            path: "/mnt/bear/data/dms-import"
       extraVolumeMounts:
         - name: nfs-dms
           mountPath: "/dms"
