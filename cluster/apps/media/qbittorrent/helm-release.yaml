@@ -5,29 +5,35 @@ metadata:
   name: qbittorrent
   namespace: media
 spec:
+  releaseName: qbittorrent
   interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: qbittorrent
-      version: 13.2.0
+      version: 13.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  install:
-    createNamespace: true
   values:
     image:
       repository: ghcr.io/linuxserver/qbittorrent
       tag: release-4.4.0-ls168
+
+    settings:
+      automaticPortSetup: false
+
+    podAnnotations:
+      setGateway: "true"
+
+    hostname: qbittorrent
+
     env:
       TZ: "Asia/Dubai"
       DOCKER_MODS: "linuxserver/qbittorrent|ghcr.io/gilbn/theme.park:qbittorrent"
       TP_THEME: "dracula"
-    settings:
-      automaticPortSetup: false
     service:
       main:
         ports:
@@ -36,9 +42,7 @@ spec:
       bittorrent:
         enabled: true
         type: LoadBalancer
-        # loadBalancerIP: 192.168.2.62
-        externalIPs:
-          - "${SVC_QBITTORRENT_ADDR}"
+        loadBalancerIP: "${SVC_QBITTORRENT_ADDR}"
         ports:
           bittorrent:
             enabled: true
@@ -52,37 +56,29 @@ spec:
         ingressClassName: "traefik"
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           hajimari.io/enable: "true"
           hajimari.io/icon: "cloud-download"
         hosts:
-          - host: &host "qb.${SECRET_DOMAIN}"
+          - host: "qb.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
         tls:
-          - secretName: qbittorrent-tls
-            hosts:
-              - *host
-    metrics:
-      enabled: true
-      exporter:
-        image:
-          repository: ghcr.io/k8s-at-home/prometheus-qbittorrent-exporter
-          tag: v1.2.0
-      serviceMonitor:
-        interval: 1m
-        scrapeTimeout: 10s
-      prometheusRule:
-        enabled: true
+          - hosts:
+              - "qb.${SECRET_DOMAIN}"
+            secretName: tls.qb
+
     podSecurityContext:
       supplementalGroups:
         - 100
+
     persistence:
       config:
         enabled: true
         existingClaim: qbittorrent-config-v2
-      media:
+
+      nfs-nas-media:
         enabled: true
         type: custom
         volumeSpec:
@@ -90,9 +86,42 @@ spec:
             server: "${NAS_ADD}"
             path: /mnt/bear/media
         mountPath: /media
+        readOnly: false
+
     resources:
       requests:
         memory: 250Mi
         cpu: 500m
       limits:
         memory: 3000Mi
+
+    prometheus:
+      podMonitor:
+        enabled: true
+        interval: 10m
+        scrapeTimeout: 2m
+
+    # additionalContainers:
+    #   - name: exporter
+    #     image: esanchezm/prometheus-qbittorrent-exporter:latest
+    #     imagePullPolicy: IfNotPresent
+    #     env:
+    #       - name: QBITTORRENT_HOST
+    #         value: "http://localhost"
+    #       - name: QBITTORRENT_PORT
+    #         value: "8080"
+    #       # - name: QBITTORRENT_USER
+    #       #   value: "${SECRET_QB_USER}"
+    #       # - name: QBITTORRENT_PASS
+    #       #   value: "${SECRET_QB_PASSWORD}"
+    #       - name: EXPORTER_PORT
+    #         value: "9022"
+    #       - name: EXPORTER_LOG_LEVEL
+    #         value: "INFO"
+    #       - name: METRICS_PREFIX
+    #         value: "qbittorrent"
+    #     ports:
+    #       - name: metrics
+    #         containerPort: 9022
+    # nodeSelector:
+    #   node-role.kubernetes.io/worker: "true"
