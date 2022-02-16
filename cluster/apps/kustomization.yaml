@@ -11,5 +11,5 @@ resources:
   - db
   - home
   - collab
-  # - monitoring
+  - monitoring
   - kasten-io
